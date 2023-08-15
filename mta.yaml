@@ -1,13 +1,14 @@
 _schema-version: '3.1'
 ID: mtademo
-version: 1.0.2
-description: "A simple CAP project with service and with authentication"
+version: 1.0.3
+description: "A simple CAP project with service and with authentication and approuter"
 parameters:
   enable-parallel-deployments: true
 build-parameters:
   before-all:
     - builder: custom
       commands:
+        - npm i @sap/cds-dk
         - npx cds build --production
 modules:
   - name: mtademo-srv
@@ -26,14 +27,31 @@ modules:
     requires:
       - name: mtademo-db
       - name: mtademo-auth
-  # - name: mtademo-db-deployer
-  #   type: hdb
-  #   path: gen/db
-  #   parameters:
-  #     buildpack: nodejs_buildpack
-  #   requires:
-  #     - name: mtademo-db
+      # - name: mtademo-auth
+      # - name: mtademo-db-deployer
+      #   type: hdb
+      #   path: gen/db
+      #   parameters:
+      #     buildpack: nodejs_buildpack
+      #   requires:
+      #     - name: mtademo-db
 
+
+  - name: mtademo
+    type: approuter.nodejs
+    path: app/ # from cds.env.folders. Consider also cds.env.build.target -> gen/app
+    parameters:
+      keep-existing-routes: true
+      disk-quota: 256M
+      memory: 256M
+    requires:
+      - name: srv-api
+        group: destinations
+        properties:
+          name: srv-api # must be used in xs-app.json as well
+          url: ~{srv-url}
+          forwardAuthToken: true
+      - name: mtademo-auth
 resources:
   - name: mtademo-db
     type: com.sap.xs.hdi-container

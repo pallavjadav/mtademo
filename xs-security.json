@@ -1,7 +1,48 @@
 {
   "xsappname": "mtademo",
   "tenant-mode": "dedicated",
-  "scopes": [],
-  "attributes": [],
-  "role-templates": []
+  "scopes": [
+    {
+      "name": "$XSAPPNAME.EMPLOYEE",
+      "description": "EMPLOYEE"
+    },
+    {
+      "name": "$XSAPPNAME.MANAGER",
+      "description": "MANAGER"
+    }
+  ],
+  "attributes": [
+    {
+      "name": "mailId",
+      "description": "mailId",
+      "valueType": "s",
+      "valueRequired": false
+    }
+  ],
+  "role-templates": [
+    {
+      "name": "EMPLOYEE",
+      "description": "Employee",
+      "scope-references": [
+        "$XSAPPNAME.EMPLOYEE"
+      ],
+      "attribute-references": [
+        "mailId"
+      ]
+    },
+    {
+      "name": "MANAGER",
+      "description": "generated",
+      "scope-references": [
+        "$XSAPPNAME.MANAGER"
+      ],
+      "attribute-references": []
+    }
+  ],
+  "oauth2-configuration": {
+    "token-validity": 900,
+    "redirect-uris": [
+      "https://*.cfapps.us10-001.hana.ondemand.com/login/callback"
+    ]
+  }
 }

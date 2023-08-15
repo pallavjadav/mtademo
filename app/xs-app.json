@@ -1,0 +1,27 @@
+{
+  "welcomeFile": "unlocked/index.html",
+  "authenticationMethod": "route",
+  "routes": [
+    {
+      "source": "^/unlocked/(.*)$",
+      "target": "$1",
+      "localDir": "unlocked/",
+      "cacheControl": "no-cache, no-store, must-revalidate",
+      "authenticationType":"none"
+    },
+    {
+      "source": "^/locked/(.*)$",
+      "target": "$1",
+      "localDir": "locked/",
+      "cacheControl": "no-cache, no-store, must-revalidate",
+      "authenticationType":"xsuaa"
+    },
+    {
+      "source": "^/(.*)$",
+      "target": "$1",
+      "destination": "srv-api",
+      "csrfProtection": false,
+      "authenticationType": "xsuaa"
+    }
+  ]
+}
